@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+*.egg
+.env
+venv/
+.env.*
+**/__pycache__/
+*.py[cod]
+
+# Docker
+*.log
+docker-compose.override.yml
+.docker/
+
+media/
+
+# VSCode/IDE/editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# MacOS
+.DS_Store
+
+
+
+
