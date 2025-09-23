@@ -2,6 +2,7 @@ import os
 import json 
 import openpyxl
 import datetime
+import requests
 
 def excel_to_json(path):
     wb = openpyxl.load_workbook(path, data_only=True)
@@ -48,12 +49,13 @@ def main():
 
     data_collected = {
         'station_id': station,
+        'first_date': first_date,
+        'last_date' : last_date,
         'forecasts': []
     }
 
     #TODO: Date is very boring, I have to check this sequence
     #TODO: First make a check for every sheet before create the object
-
 
 
     for line in range(first_line, last_line + 1):
@@ -62,8 +64,6 @@ def main():
 
         date = wb['15630000(4787)'][coordinates_date].value 
         forecast = wb['15630000(4787)'][coordinates_forecast].value
-
-        print(date, forecast)
 
         if (date != None or forecast != None):
             object_forecast = {
@@ -74,11 +74,15 @@ def main():
             data_collected['forecasts'].append(object_forecast)
         else:
             line = last_line + 1
-            print("Para tudo")
-
+            print("Stop")
 
     wb.close()
-    print(json.dumps(data_collected))
+
+    url = f'http://0.0.0.0:3333/{station}'
+
+    r = requests.post(url, data=json.dumps(data_collected))
+
+    print(r.status_code)
 
 if __name__ == "__main__":
     main()
