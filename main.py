@@ -29,7 +29,7 @@ def main():
     # last_line = int(input("Digite o número da última LINHA DA PLANILHA da previsão coleteada e normalizada (ex.: 359): "))
     last_line = 359
     # column = input("Digite a COLUNA DA PLANILHA onde estão os respectivos valores de previsão coletada e normalizada (ex.: BY): ")
-    column_forecast = 'BY'
+    column_forecast = 'BZ'
 
     #TODO: Check the values in one sheet
     #TODO: Check if the date values in backend is the next
@@ -40,17 +40,14 @@ def main():
 
     #TODO: Get station
 
-    print(wb['15630000(4787)']['BY278'].value)
-    print(wb['15630000(4787)']['BP278'].value)
-
     station = '15630000'
     
     #TODO: Create a class File with the values collected before
 
     data_collected = {
-        'station_id': station,
-        'first_date': first_date,
-        'last_date' : last_date,
+        'stationId': station,
+        'firstDate': first_date,
+        'lastDate' : last_date,
         'forecasts': []
     }
 
@@ -68,7 +65,9 @@ def main():
         if (date != None or forecast != None):
             object_forecast = {
                 'date': date.strftime("%Y-%m-%d %H:%M:%S"),
-                'forecast': forecast
+                'elevation': 0,
+                'flow': forecast,
+                'station_id': station
             }
 
             data_collected['forecasts'].append(object_forecast)
@@ -78,11 +77,12 @@ def main():
 
     wb.close()
 
-    url = f'http://0.0.0.0:3333/{station}'
+    url = f'http://localhost:5000'
 
-    r = requests.post(url, data=json.dumps(data_collected))
+    r = requests.post(url, json=data_collected)
 
     print(r.status_code)
+    print(r.content)
 
 if __name__ == "__main__":
     main()
